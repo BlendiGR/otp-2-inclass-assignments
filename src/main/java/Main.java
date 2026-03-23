@@ -29,7 +29,7 @@ public class Main {
         for (int i = 0; i < numberAmount; i++){
             int quantity;
             double price;
-            System.out.println("TUOTE " + "[" + (i+1) + "] " + messages.getString("prompt.price"));
+            System.out.println(messages.getString("prompt.item") + "[" + (i+1) + "] " + messages.getString("prompt.price"));
             price = scanner.nextDouble();
 
             System.out.println(messages.getString("prompt.quantity"));
