@@ -1,10 +1,6 @@
 pipeline {
    agent any;
 
-   tools {
-       maven 'Maven3'
-   }
-
    environment {
        DOCKERHUB_CREDENTIALS_ID = 'docker_hub'
        DOCKERHUB_REPO = 'blendigr/blendi_test'
