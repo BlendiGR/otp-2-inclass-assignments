@@ -66,8 +66,8 @@ public class FuelCalculatorController {
                 return;
             }
 
-            double totalFuel = (consumption / 100.0) * distance;
-            double totalCost = totalFuel * price;
+            double totalFuel = FuelCalculator.calculateFuel(distance, consumption);
+            double totalCost = FuelCalculator.calculateCost(totalFuel, price);
 
             String resultTemplate = bundle.getString("result.label");
             lblResult.setText(MessageFormat.format(resultTemplate,
