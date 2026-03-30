@@ -5,6 +5,7 @@ pipeline {
        DOCKERHUB_CREDENTIALS_ID = 'docker_hub'
        DOCKERHUB_REPO = 'blendigr/blendi_test'
        DOCKER_IMAGE_TAG = 'latest'
+
    }
 
    stages {
