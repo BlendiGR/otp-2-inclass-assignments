@@ -6,8 +6,6 @@ import javafx.scene.control.TextField;
 
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 public class FuelCalculatorController {
 
@@ -20,7 +18,8 @@ public class FuelCalculatorController {
     @FXML private TextField txtPrice;
     @FXML private Button btnCalculate;
 
-    private ResourceBundle bundle;
+    private final LocalizationService localizationService = LocalizationService.getInstance();
+    private Locale currentLocale = Locale.of("en", "US");
 
     @FXML
     public void initialize() {
@@ -28,24 +27,22 @@ public class FuelCalculatorController {
     }
 
     public void setLanguage(Locale locale) {
-        try {
-            bundle = ResourceBundle.getBundle("messages", locale);
-            lblDistance.setText(bundle.getString("distance.label"));
-            lblConsumption.setText(bundle.getString("consumption.label"));
-            lblPrice.setText(bundle.getString("price.label"));
-            btnCalculate.setText(bundle.getString("calculate.button"));
-            lblResult.setText("");
+        currentLocale = locale;
+        localizationService.setCurrentLanguage(locale.getLanguage());
 
-            boolean isRTL = locale.getLanguage().equals("fa");
-            NodeOrientation orientation = isRTL
-                    ? NodeOrientation.RIGHT_TO_LEFT
-                    : NodeOrientation.LEFT_TO_RIGHT;
+        lblDistance.setText(localizationService.getString("distance.label"));
+        lblConsumption.setText(localizationService.getString("consumption.label"));
+        lblPrice.setText(localizationService.getString("price.label"));
+        btnCalculate.setText(localizationService.getString("calculate.button"));
+        lblResult.setText("");
 
-            if (lblDistance.getScene() != null) {
-                lblDistance.getScene().getRoot().setNodeOrientation(orientation);
-            }
-        } catch (MissingResourceException e) {
-            lblResult.setText("resource file not found for locale " + locale);
+        boolean isRTL = locale.getLanguage().equals("fa");
+        NodeOrientation orientation = isRTL
+                ? NodeOrientation.RIGHT_TO_LEFT
+                : NodeOrientation.LEFT_TO_RIGHT;
+
+        if (lblDistance.getScene() != null) {
+            lblDistance.getScene().getRoot().setNodeOrientation(orientation);
         }
     }
 
@@ -62,20 +59,25 @@ public class FuelCalculatorController {
             double price       = Double.parseDouble(txtPrice.getText().trim());
 
             if (distance < 0 || consumption < 0 || price < 0) {
-                lblResult.setText(bundle.getString("invalid.input"));
+                lblResult.setText(localizationService.getString("invalid.input"));
                 return;
             }
 
             double totalFuel = FuelCalculator.calculateFuel(distance, consumption);
             double totalCost = FuelCalculator.calculateCost(totalFuel, price);
 
-            String resultTemplate = bundle.getString("result.label");
+            String resultTemplate = localizationService.getString("result.label");
             lblResult.setText(MessageFormat.format(resultTemplate,
                     String.format("%.2f", totalFuel),
                     String.format("%.2f", totalCost)));
 
+            CalculationRecord record = new CalculationRecord(
+                    distance, consumption, price, totalFuel, totalCost,
+                    currentLocale.getLanguage());
+            CalculationService.saveCalculation(record);
+
         } catch (NumberFormatException e) {
-            lblResult.setText(bundle.getString("invalid.input"));
+            lblResult.setText(localizationService.getString("invalid.input"));
         }
     }
 }
