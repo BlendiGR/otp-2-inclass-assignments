@@ -71,10 +71,10 @@ public class FuelCalculatorController {
                     String.format("%.2f", totalFuel),
                     String.format("%.2f", totalCost)));
 
-            CalculationRecord record = new CalculationRecord(
+            CalculationRecord calcRecord = new CalculationRecord(
                     distance, consumption, price, totalFuel, totalCost,
                     currentLocale.getLanguage());
-            CalculationService.saveCalculation(record);
+            CalculationService.saveCalculation(calcRecord);
 
         } catch (NumberFormatException e) {
             lblResult.setText(localizationService.getString("invalid.input"));

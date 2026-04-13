@@ -1,4 +1,6 @@
 public class FuelCalculator {
+    private FuelCalculator() {
+    }
 
     public static double calculateFuel(double distanceKm, double consumptionPer100Km) {
         return (consumptionPer100Km / 100.0) * distanceKm;
