@@ -35,6 +35,14 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQubeServer') {
+                    bat "\"${tool 'SonarScanner'}\\bin\\sonar-scanner\""
+                }
+            }
+        }
+
         stage("Build and Push Docker Image"){
             steps{
                 withCredentials([usernamePassword(credentialsId: "${env.DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
