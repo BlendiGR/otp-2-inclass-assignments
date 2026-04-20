@@ -37,7 +37,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQubeServer') {
+                withSonarQubeEnv('sonar_qube') {
                     bat "\"${tool 'SonarScanner'}\\bin\\sonar-scanner\""
                 }
             }
